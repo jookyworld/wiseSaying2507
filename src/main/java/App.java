@@ -2,6 +2,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Scanner;
+import java.util.stream.IntStream;
 
 public class App {
     Scanner scanner = new Scanner(System.in);
@@ -49,13 +50,19 @@ public class App {
     void actionList() {
         System.out.println("번호 / 작가 / 명언");
         System.out.println("------------------------------");
-//        for (WiseSaying ws : wiseSayings) {
-//            System.out.println(ws.getId() + " / " +=== ws.getAuthor() + " / " + ws.getContent());
+
+//        for (int i = wiseSayings.size() - 1; i >= 0; i--) {
+//            WiseSaying ws = wiseSayings.get(i);
+//            System.out.println(ws.getId() + " / " + ws.getAuthor() + " / " + ws.getContent());
 //        }
-        for (int i = wiseSayings.size() - 1; i >= 0; i--) {
-            WiseSaying ws = wiseSayings.get(i);
-            System.out.println(ws.getId() + " / " + ws.getAuthor() + " / " + ws.getContent());
-        }
+
+        IntStream.range(0, wiseSayings.size())
+                .map(i -> wiseSayings.size()-1-i)
+                .mapToObj(wiseSayings::get)
+                .forEach(ws -> {
+                    System.out.println(ws.getId() + " / " + ws.getAuthor() + " / " + ws.getContent());
+                });
+
     }
 
     void actionDelete(String cmd) {
