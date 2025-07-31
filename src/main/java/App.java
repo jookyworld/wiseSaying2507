@@ -50,7 +50,7 @@ public class App {
         System.out.println("번호 / 작가 / 명언");
         System.out.println("------------------------------");
 //        for (WiseSaying ws : wiseSayings) {
-//            System.out.println(ws.getId() + " / " + ws.getAuthor() + " / " + ws.getContent());
+//            System.out.println(ws.getId() + " / " +=== ws.getAuthor() + " / " + ws.getContent());
 //        }
         for (int i = wiseSayings.size() - 1; i >= 0; i--) {
             WiseSaying ws = wiseSayings.get(i);
@@ -110,17 +110,12 @@ public class App {
     }
 
     WiseSaying getIdFromCmd(int id) {
-        Optional<WiseSaying> tmpWiseSaying = wiseSayings.stream()
+        return wiseSayings.stream()
                 .filter(e -> e.getId() == id)
-                .findFirst();
-
-        WiseSaying wiseSaying = tmpWiseSaying.orElse(null);
-
-        if (wiseSaying == null) {
-            System.out.println(id + "번 명언은 존재하지 않습니다.");
-            return null;
-        }
-
-        return wiseSaying;
+                .findFirst()
+                .orElseGet(() -> {
+                    System.out.println(id + "번 명언은 존재하지 않습니다.");
+                    return null;
+                });
     }
 }
