@@ -15,20 +15,27 @@ public class App {
             System.out.print("명령) ");
             String cmd = scanner.nextLine().trim();
 
-            if (cmd.equals("종료")) {
-                System.out.println("시스템을 종료합니다.");
-                break;
-            } else if (cmd.equals("등록")) {
-                actionWrite();
-            } else if (cmd.equals("목록")) {
-                actionList();
-            } else if (cmd.contains("삭제")) {
-                actionDelete(cmd);
-            } else if (cmd.contains("수정")) {
-                actionUpdate(cmd);
+            Rq rq = new Rq(cmd);
+
+            switch (rq.getActionName()) {
+                case "종료":
+                    System.out.println("시스템을 종료합니다.");
+                    return;
+                case "등록":
+                    actionWrite();
+                    break;
+                case "목록":
+                    actionList();
+                    break;
+                case "삭제":
+                    actionDelete(rq);
+                    break;
+                case "수정":
+                    actionUpdate(rq);
+                    break;
             }
+
         }
-        scanner.close();
     }
 
     void actionWrite() {
@@ -57,7 +64,7 @@ public class App {
 //        }
 
         IntStream.range(0, wiseSayings.size())
-                .map(i -> wiseSayings.size()-1-i)
+                .map(i -> wiseSayings.size() - 1 - i)
                 .mapToObj(wiseSayings::get)
                 .forEach(ws -> {
                     System.out.println(ws.getId() + " / " + ws.getAuthor() + " / " + ws.getContent());
@@ -65,9 +72,10 @@ public class App {
 
     }
 
-    void actionDelete(String cmd) {
-        int deleteId = findWiseSayingIdByString(cmd);
-        if (deleteId < 0) {
+    void actionDelete(Rq rq) {
+        int deleteId = rq.getParamAsInt("id", -1);
+        if (deleteId == -1) {
+            System.out.println("숫자를 입력해주세요.");
             return;
         }
         WiseSaying deleteWiseSaying = getIdFromCmd(deleteId);
@@ -82,9 +90,10 @@ public class App {
         wiseSayings.remove(wiseSaying);
     }
 
-    void actionUpdate(String cmd) {
-        int updateId = findWiseSayingIdByString(cmd);
-        if (updateId < 0) {
+    void actionUpdate(Rq rq) {
+        int updateId = rq.getParamAsInt("id", -1);
+        if (updateId < -1) {
+            System.out.println("숫자를 입력해주세요.");
             return;
         }
         WiseSaying updateWiseSaying = getIdFromCmd(updateId);
@@ -104,16 +113,6 @@ public class App {
     void update(WiseSaying wiseSaying, String updateAuthor, String updateContent) {
         wiseSaying.setAuthor(updateAuthor);
         wiseSaying.setContent(updateContent);
-    }
-
-    int findWiseSayingIdByString(String cmd) {
-//        return Integer.parseInt(cmd.substring(cmd.indexOf('=') + 1));
-        String[] str = cmd.split("=");
-        if (str.length < 2 || str[1].isEmpty()) {
-            System.out.println("id를 입력해주세요");
-            return -1;
-        }
-        return Integer.parseInt(str[1]);
     }
 
     WiseSaying getIdFromCmd(int id) {
