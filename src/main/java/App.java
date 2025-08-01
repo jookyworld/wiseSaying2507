@@ -5,8 +5,8 @@ import java.util.Scanner;
 import java.util.stream.IntStream;
 
 public class App {
-    Scanner scanner = new Scanner(System.in);
-    List<WiseSaying> wiseSayings = new ArrayList<>();
+    private final Scanner scanner = new Scanner(System.in);
+    private final List<WiseSaying> wiseSayings = new ArrayList<>();
     int lastId = 0;
 
     void run() {
@@ -18,21 +18,14 @@ public class App {
             Rq rq = new Rq(cmd);
 
             switch (rq.getActionName()) {
-                case "종료":
+                case "종료" -> {
                     System.out.println("시스템을 종료합니다.");
                     return;
-                case "등록":
-                    actionWrite();
-                    break;
-                case "목록":
-                    actionList();
-                    break;
-                case "삭제":
-                    actionDelete(rq);
-                    break;
-                case "수정":
-                    actionUpdate(rq);
-                    break;
+                }
+                case "등록" -> actionWrite();
+                case "목록" -> actionList();
+                case "삭제" -> actionDelete(rq);
+                case "수정" -> actionUpdate(rq);
             }
 
         }
@@ -57,11 +50,6 @@ public class App {
     void actionList() {
         System.out.println("번호 / 작가 / 명언");
         System.out.println("------------------------------");
-
-//        for (int i = wiseSayings.size() - 1; i >= 0; i--) {
-//            WiseSaying ws = wiseSayings.get(i);
-//            System.out.println(ws.getId() + " / " + ws.getAuthor() + " / " + ws.getContent());
-//        }
 
         IntStream.range(0, wiseSayings.size())
                 .map(i -> wiseSayings.size() - 1 - i)
